@@ -226,7 +226,7 @@ export default function Unit1Quiz() {
               ))}
               {showFeedback && (
                 <div style={S.feedbackBar(selected[currentQ] === q.answer)}>
-                  {selected[currentQ] === q.answer ? "✅ Correct! " : selected[currentQ] === null ? "⏰ Time's up! " : "❌ Wrong! "}
+                  {selected[currentQ] === q.answer ? "✅ Correct! " : selected[currentQ] === null ? "⏰ Time is up! " : "❌ Wrong! "}
                   {q.explanation}
                 </div>
               )}
@@ -250,7 +250,7 @@ export default function Unit1Quiz() {
                 </div>
               </div>
               <h2 style={{ margin: "0 0 4px", fontSize: "22px", color: "#1e293b" }}>
-                {lastResult.pct >= 80 ? "🌟 Excellent!" : lastResult.pct >= 60 ? "👍 Good Job!" : lastResult.pct >= 40 ? "📚 Keep Studying!" : "💪 Don't Give Up!"}
+                {lastResult.pct >= 80 ? "🌟 Excellent!" : lastResult.pct >= 60 ? "👍 Good Job!" : lastResult.pct >= 40 ? "📚 Keep Studying!" : "💪 Do not Give Up!"}
               </h2>
               <p style={{ color: "#64748b", margin: "0 0 4px" }}>{lastResult.name} — {lastResult.score} / 15 correct</p>
               <span style={{ background: lastResult.pct >= 80 ? "#dcfce7" : lastResult.pct >= 60 ? "#fef9c3" : "#fee2e2", color: lastResult.pct >= 80 ? "#15803d" : lastResult.pct >= 60 ? "#92400e" : "#b91c1c", fontWeight: 800, padding: "3px 14px", borderRadius: "20px", fontSize: "13px" }}>
