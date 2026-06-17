@@ -226,7 +226,7 @@ export default function Unit1Quiz() {
               ))}
               {showFeedback && (
                 <div style={S.feedbackBar(selected[currentQ] === q.answer)}>
-                  {selected[currentQ] === q.answer ? "✅ Correct! " : selected[currentQ] === null ? "⏰ Time is up! " : "❌ Wrong! "}
+                  {selected[currentQ] === q.answer ? "✅ Correct! " : selected[currentQ] === null ? "⏰ Time's up! " : "❌ Wrong! "}
                   {q.explanation}
                 </div>
               )}
@@ -250,7 +250,7 @@ export default function Unit1Quiz() {
                 </div>
               </div>
               <h2 style={{ margin: "0 0 4px", fontSize: "22px", color: "#1e293b" }}>
-                {lastResult.pct >= 80 ? "🌟 Excellent!" : lastResult.pct >= 60 ? "👍 Good Job!" : lastResult.pct >= 40 ? "📚 Keep Studying!" : "💪 Do not Give Up!"}
+                {lastResult.pct >= 80 ? "🌟 Excellent!" : lastResult.pct >= 60 ? "👍 Good Job!" : lastResult.pct >= 40 ? "📚 Keep Studying!" : "💪 Don't Give Up!"}
               </h2>
               <p style={{ color: "#64748b", margin: "0 0 4px" }}>{lastResult.name} — {lastResult.score} / 15 correct</p>
               <span style={{ background: lastResult.pct >= 80 ? "#dcfce7" : lastResult.pct >= 60 ? "#fef9c3" : "#fee2e2", color: lastResult.pct >= 80 ? "#15803d" : lastResult.pct >= 60 ? "#92400e" : "#b91c1c", fontWeight: 800, padding: "3px 14px", borderRadius: "20px", fontSize: "13px" }}>
@@ -258,4 +258,66 @@ export default function Unit1Quiz() {
               </span>
             </div>
             <div style={{ marginBottom: "18px" }}>
-              <div style={{ fontWeight: 800, fontSize: "13px", color: "#374151", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1p
+              <div style={{ fontWeight: 800, fontSize: "13px", color: "#374151", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px " }}>Answer Review</div>
+              {mcqs.map((q, i) => (
+                <div key={i} style={S.ansRow(lastResult.answers[i] === q.answer)}>
+                  <span style={{ fontWeight: 700, color: "#475569" }}>Q{i + 1}</span>
+                  <span style={{ flex: 1, margin: "0 10px", color: "#64748b", fontSize: "12px" }}>{q.question.slice(0, 45)}…</span>
+                  <span>{lastResult.answers[i] === q.answer ? "✅" : lastResult.answers[i] === null ? "⏰" : "❌"}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <button style={{ ...S.bigBtn, flex: 1 }} onClick={() => { setStudentName(""); setScreen("home"); }}>🔄 Play Again</button>
+              <button style={{ ...S.excelBtn, flex: 1 }} onClick={exportExcel}>📥 Export Excel</button>
+            </div>
+            <button style={{ ...S.outlineBtn, width: "100%", marginTop: "10px", fontSize: "14px" }} onClick={() => setScreen("leaderboard")}>📋 All Results</button>
+          </div>
+        </div>
+      )}
+
+      {/* ── LEADERBOARD ── */}
+      {screen === "leaderboard" && (
+        <div style={S.center}>
+          <div style={S.card}>
+            <h2 style={{ margin: "0 0 4px", fontSize: "22px", color: "#1e293b" }}>📋 Student Results</h2>
+            <p style={{ color: "#64748b", fontSize: "13px", margin: "0 0 18px" }}>{results.length} student{results.length !== 1 ? "s" : ""} have attempted this quiz</p>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                <thead>
+                  <tr style={{ background: "#6366f1", color: "#fff" }}>
+                    {["#", "Name", "Score", "%", "Grade"].map(h => (
+                      <th key={h} style={{ padding: "10px 12px", textAlign: h === "Name" ? "left" : "center", fontWeight: 800 }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...results].sort((a, b) => b.score - a.score).map((r, i) => (
+                    <tr key={i} style={{ background: i % 2 === 0 ? "#f8fafc" : "#fff" }}>
+                      <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: 700, color: i === 0 ? "#f59e0b" : "#64748b" }}>{i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1}</td>
+                      <td style={{ padding: "9px 12px", fontWeight: 600, color: "#1e293b" }}>{r.name}</td>
+                      <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: 700, color: "#4f46e5" }}>{r.score}/15</td>
+                      <td style={{ padding: "9px 12px", textAlign: "center", color: r.pct >= 80 ? "#16a34a" : r.pct >= 60 ? "#d97706" : "#dc2626", fontWeight: 700 }}>{r.pct}%</td>
+                      <td style={{ padding: "9px 12px", textAlign: "center" }}>
+                        <span style={{ background: r.pct >= 80 ? "#dcfce7" : r.pct >= 60 ? "#fef9c3" : "#fee2e2", color: r.pct >= 80 ? "#15803d" : r.pct >= 60 ? "#92400e" : "#b91c1c", padding: "2px 10px", borderRadius: "20px", fontWeight: 800, fontSize: "12px" }}>
+                          {r.pct >= 80 ? "A" : r.pct >= 60 ? "B" : r.pct >= 40 ? "C" : "D"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
+              <button style={{ ...S.bigBtn, flex: 1 }} onClick={() => { setStudentName(""); setScreen("home"); }}>← Back</button>
+              <button style={{ ...S.excelBtn, flex: 1 }} onClick={exportExcel}>📥 Export Excel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── FOOTER ── */}
+      <div style={S.footer}>PM SHRI GSSS TEMI &nbsp;·&nbsp; IT Department</div>
+    </div>
+    );
+}
